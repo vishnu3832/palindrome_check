@@ -1,38 +1,48 @@
 import java.util.Scanner;
+import java.util.Stack;
+import java.util.Queue;
+import java.util.LinkedList;
 
-public class PalindromeCheckerApp {
+public class UseCase6PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=================================");
-        System.out.println("   Palindrome Checker - UC4");
+        System.out.println(" Palindrome Checker - UC6");
+        System.out.println(" Queue + Stack Approach");
         System.out.println("=================================");
 
-        // Taking input from user
+        // Take input
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // Convert String to Character Array
-        char[] characters = input.toCharArray();
+        // Create Stack and Queue
+        Stack<Character> stack = new Stack<>();
+        Queue<Character> queue = new LinkedList<>();
 
-        // Two-pointer approach
-        int start = 0;
-        int end = characters.length - 1;
+        // Push to stack and enqueue to queue
+        for (int i = 0; i < input.length(); i++) {
+            char ch = input.charAt(i);
+            stack.push(ch);      // LIFO
+            queue.add(ch);       // FIFO
+        }
 
         boolean isPalindrome = true;
 
-        while (start < end) {
-            if (characters[start] != characters[end]) {
+        // Compare dequeue vs pop
+        while (!stack.isEmpty()) {
+            char fromStack = stack.pop();      // Last In First Out
+            char fromQueue = queue.remove();   // First In First Out
+
+            if (fromStack != fromQueue) {
                 isPalindrome = false;
                 break;
             }
-            start++;
-            end--;
         }
 
-        // Display result
+        // Print result
         if (isPalindrome) {
             System.out.println("Result: The given string is a Palindrome.");
         } else {
