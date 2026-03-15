@@ -1,44 +1,106 @@
+\import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
-public class UseCase9PalindromeCheckerApp {
+public class UseCase12PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("=================================");
-        System.out.println(" Palindrome Checker - UC9");
-        System.out.println(" Recursive Approach");
-        System.out.println("=================================");
-
-        System.out.print("Enter a string: ");
+        System.out.println("Enter a string to check if it is a palindrome:");
         String input = scanner.nextLine();
 
-        boolean isPalindrome = checkPalindrome(input, 0, input.length() - 1);
+        System.out.println("Choose strategy:");
+        System.out.println("1. Stack Strategy");
+        System.out.println("2. Deque Strategy");
+        int choice = scanner.nextInt();
 
-        if (isPalindrome) {
-            System.out.println("Result: The given string is a Palindrome.");
+        PalindromeStrategy strategy;
+
+        // Inject strategy at runtime
+        if (choice == 1) {
+            strategy = new StackStrategy();
         } else {
-            System.out.println("Result: The given string is NOT a Palindrome.");
+            strategy = new DequeStrategy();
+        }
+
+        PalindromeService service = new PalindromeService(strategy);
+
+        boolean result = service.check(input);
+
+        if (result) {
+            System.out.println("✅ The string is a Palindrome!");
+        } else {
+            System.out.println("❌ The string is NOT a Palindrome.");
         }
 
         scanner.close();
     }
+}
 
-    // Recursive function
-    public static boolean checkPalindrome(String str, int start, int end) {
+// Strategy Interface
+interface PalindromeStrategy {
+    boolean isPalindrome(String input);
+}
 
-        // Base condition
-        if (start >= end) {
-            return true;
+// Concrete Strategy 1: Stack-based
+class StackStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean isPalindrome(String input) {
+
+        Stack<Character> stack = new Stack<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            stack.push(input.charAt(i));
         }
 
-        // If mismatch found
-        if (str.charAt(start) != str.charAt(end)) {
-            return false;
+        for (int i = 0; i < input.length(); i++) {
+            if (input.charAt(i) != stack.pop()) {
+                return false;
+            }
         }
 
-        // Recursive call
-        return checkPalindrome(str, start + 1, end - 1);
+        return true;
+    }
+}
+
+// Concrete Strategy 2: Deque-based
+class DequeStrategy implements PalindromeStrategy {
+
+    @Override
+    public boolean isPalindrome(String input) {
+
+        Deque<Character> deque = new ArrayDeque<>();
+
+        for (int i = 0; i < input.length(); i++) {
+            deque.addLast(input.charAt(i));
+        }
+
+        while (deque.size() > 1) {
+            if (deque.removeFirst() != deque.removeLast()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+// Context / Service class
+class PalindromeService {
+
+    private PalindromeStrategy strategy;
+
+    public PalindromeService(PalindromeStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+    public boolean check(String input) {
+        return strategy.isPalindrome(input);
     }
 }
