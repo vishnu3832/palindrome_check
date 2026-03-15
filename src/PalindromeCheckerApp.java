@@ -7,38 +7,43 @@ public class PalindromeCheckerApp {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=================================");
-        System.out.println("   Palindrome Checker - UC4");
+        System.out.println(" Palindrome Checker - UC10");
+        System.out.println(" Case-Insensitive & Space-Ignored");
         System.out.println("=================================");
 
-        // Taking input from user
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // Convert String to Character Array
-        char[] characters = input.toCharArray();
+        // Step 1: Normalize string
+        String normalized = input
+                .replaceAll("\\s+", "")   // Remove spaces using regex
+                .toLowerCase();           // Convert to lowercase
 
-        // Two-pointer approach
-        int start = 0;
-        int end = characters.length - 1;
+        // Step 2: Apply two-pointer logic
+        boolean isPalindrome = checkPalindrome(normalized);
 
-        boolean isPalindrome = true;
-
-        while (start < end) {
-            if (characters[start] != characters[end]) {
-                isPalindrome = false;
-                break;
-            }
-            start++;
-            end--;
-        }
-
-        // Display result
         if (isPalindrome) {
-            System.out.println("Result: The given string is a Palindrome.");
+            System.out.println("Result: The given string is a Palindrome (ignoring case and spaces).");
         } else {
             System.out.println("Result: The given string is NOT a Palindrome.");
         }
 
         scanner.close();
+    }
+
+    public static boolean checkPalindrome(String str) {
+
+        int start = 0;
+        int end = str.length() - 1;
+
+        while (start < end) {
+            if (str.charAt(start) != str.charAt(end)) {
+                return false;
+            }
+            start++;
+            end--;
+        }
+
+        return true;
     }
 }
