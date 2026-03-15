@@ -1,6 +1,6 @@
-import java.util.Scanner;
+\import java.util.Scanner;
 
-public class PalindromeCheckerApp {
+public class UseCase10PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
