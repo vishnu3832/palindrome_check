@@ -1,6 +1,6 @@
-import java.util.Scanner;
+import java.util.*;
 
-public class PalindromeCheckerApp {
+public class UseCase13PalindromeCheckerApp {
 
     // Node class for Singly Linked List
     static class Node {
@@ -41,8 +41,26 @@ public class PalindromeCheckerApp {
             }
         }
 
-        boolean isPalindrome = checkPalindrome(head);
+        // Store characters from linked list into ArrayList
+        ArrayList<Character> list = new ArrayList<>();
 
+        Node temp = head;
+        while (temp != null) {
+            list.add(temp.data);
+            temp = temp.next;
+        }
+
+        // Check palindrome
+        boolean isPalindrome = true;
+
+        for (int i = 0; i < list.size() / 2; i++) {
+            if (!list.get(i).equals(list.get(list.size() - 1 - i))) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        // Print result
         if (isPalindrome) {
             System.out.println("Result: The given string is a Palindrome.");
         } else {
@@ -50,52 +68,5 @@ public class PalindromeCheckerApp {
         }
 
         scanner.close();
-    }
-
-    // Function to check palindrome using Linked List
-    public static boolean checkPalindrome(Node head) {
-
-        if (head == null || head.next == null)
-            return true;
-
-        Node slow = head;
-        Node fast = head;
-
-        // Find middle using fast & slow pointers
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
-        }
-
-        // Reverse second half
-        Node secondHalf = reverse(slow);
-        Node firstHalf = head;
-
-        // Compare both halves
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                return false;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        return true;
-    }
-
-    // Reverse linked list
-    public static Node reverse(Node head) {
-
-        Node prev = null;
-        Node current = head;
-
-        while (current != null) {
-            Node nextNode = current.next;
-            current.next = prev;
-            prev = current;
-            current = nextNode;
-        }
-
-        return prev;
     }
 }
