@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.Deque;
 import java.util.ArrayDeque;
 
-public class PalindromeCheckerApp {
+public class UseCase13PalindromeCheckerApp {
 
     public static void main(String[] args) {
 
@@ -25,6 +25,7 @@ public class PalindromeCheckerApp {
             deque.addLast(input.charAt(i));
         }
 
+        // Check palindrome
         boolean isPalindrome = true;
 
         // Remove first & last and compare
@@ -47,4 +48,4 @@ public class PalindromeCheckerApp {
 
         scanner.close();
     }
-}}
+}
