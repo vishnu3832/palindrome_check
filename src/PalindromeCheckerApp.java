@@ -29,9 +29,10 @@ public class UseCase6PalindromeCheckerApp {
             queue.add(ch);       // FIFO
         }
 
+        // Check palindrome
         boolean isPalindrome = true;
 
-        // Compare dequeue vs pop
+        // Compare stack pop vs queue remove
         while (!stack.isEmpty()) {
             char fromStack = stack.pop();      // Last In First Out
             char fromQueue = queue.remove();   // First In First Out
