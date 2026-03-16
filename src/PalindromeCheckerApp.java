@@ -2,109 +2,71 @@ import java.util.*;
 
 public class UseCase13PalindromeCheckerApp {
 
+    // Node class for Singly Linked List
+    static class Node {
+        char data;
+        Node next;
+
+        Node(char data) {
+            this.data = data;
+            this.next = null;
+        }
+    }
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("=================================");
-        System.out.println(" Palindrome Checker - UC13");
-        System.out.println(" Strategy Pattern + Performance Comparison");
+        System.out.println(" Palindrome Checker - UC8");
+        System.out.println(" Linked List Based Approach");
         System.out.println("=================================");
 
         System.out.print("Enter a string: ");
         String input = scanner.nextLine();
 
-        // --- Strategy 1 : Stack ---
-        PalindromeStrategy stackStrategy = new StackStrategy();
-        PalindromeService stackService = new PalindromeService(stackStrategy);
+        // Convert string to linked list
+        Node head = null;
+        Node tail = null;
 
-        long start1 = System.nanoTime();
-        boolean stackResult = stackService.check(input);
-        long end1 = System.nanoTime();
+        for (int i = 0; i < input.length(); i++) {
+            Node newNode = new Node(input.charAt(i));
 
-        // --- Strategy 2 : Deque ---
-        PalindromeStrategy dequeStrategy = new DequeStrategy();
-        PalindromeService dequeService = new PalindromeService(dequeStrategy);
+            if (head == null) {
+                head = newNode;
+                tail = newNode;
+            } else {
+                tail.next = newNode;
+                tail = newNode;
+            }
+        }
 
-        long start2 = System.nanoTime();
-        boolean dequeResult = dequeService.check(input);
-        long end2 = System.nanoTime();
+        // Store characters from linked list into ArrayList
+        ArrayList<Character> list = new ArrayList<>();
 
-        System.out.println("\n--- Results ---");
+        Node temp = head;
+        while (temp != null) {
+            list.add(temp.data);
+            temp = temp.next;
+        }
 
-        System.out.println("Stack Strategy Result : " + stackResult +
-                " | Time: " + (end1 - start1) + " ns");
+        // Check palindrome
+        boolean isPalindrome = true;
 
-        System.out.println("Deque Strategy Result : " + dequeResult +
-                " | Time: " + (end2 - start2) + " ns");
+        for (int i = 0; i < list.size() / 2; i++) {
+            if (!list.get(i).equals(list.get(list.size() - 1 - i))) {
+                isPalindrome = false;
+                break;
+            }
+        }
+
+        // Print result
+        if (isPalindrome) {
+            System.out.println("Result: The given string is a Palindrome.");
+        } else {
+            System.out.println("Result: The given string is NOT a Palindrome.");
+        }
 
         scanner.close();
-    }
-}
-
-
-// Strategy Interface
-interface PalindromeStrategy {
-    boolean isPalindrome(String input);
-}
-
-
-// Concrete Strategy 1: Stack-based
-class StackStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean isPalindrome(String input) {
-
-        Stack<Character> stack = new Stack<>();
-
-        for (int i = 0; i < input.length(); i++) {
-            stack.push(input.charAt(i));
-        }
-
-        for (int i = 0; i < input.length(); i++) {
-            if (input.charAt(i) != stack.pop()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-
-// Concrete Strategy 2: Deque-based
-class DequeStrategy implements PalindromeStrategy {
-
-    @Override
-    public boolean isPalindrome(String input) {
-
-        Deque<Character> deque = new ArrayDeque<>();
-
-        for (int i = 0; i < input.length(); i++) {
-            deque.addLast(input.charAt(i));
-        }
-
-        while (deque.size() > 1) {
-            if (!deque.removeFirst().equals(deque.removeLast())) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-}
-
-
-// Context / Service class
-class PalindromeService {
-
-    private PalindromeStrategy strategy;
-
-    public PalindromeService(PalindromeStrategy strategy) {
-        this.strategy = strategy;
-    }
-
-    public boolean check(String input) {
-        return strategy.isPalindrome(input);
     }
 }
